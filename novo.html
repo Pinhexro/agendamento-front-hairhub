@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Agendamento</title>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Novo Agendamento</h2>
+
+        <!-- Passo 1: Serviço -->
+        <select id="servico">
+            <option value="">Selecione o serviço</option>
+            <option value="Corte de cabelo" data-valor="30">Corte de cabelo - R$30</option>
+            <option value="Corte + Barba" data-valor="45">Corte + Barba - R$45</option>
+        </select>
+
+        <!-- Passo 2: Data -->
+        <input type="date" id="data">
+
+        <!-- Passo 2: Horário (30 em 30 minutos) -->
+        <select id="hora">
+            <option value="">Selecione o horário</option>
+        </select>
+
+        <!-- Passo 3 -->
+        <button class="btn primary" onclick="confirmar()">Confirmar</button>
+        <a href="index.html" class="btn">Cancelar</a>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/novo.js"></script>
+</body>
+
+</html>
