@@ -48,3 +48,31 @@ select {
     padding: 10px;
     margin-bottom: 15px;
 }
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: #0d6efd;
+    color: white;
+}
+
+.btn.primary:hover {
+    background: #0b5ed7;
+}
+
+.btn.cancel {
+    background: #e0e0e0;
+    color: #000;
+    text-decoration: none;
+}

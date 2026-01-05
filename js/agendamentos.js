@@ -1,37 +1,42 @@
-// ==============================
-// PROTEGER TODOS AS PÁGINAS
-// ==============================
-const token = localStorage.getItem("token");
-if (!token) window.location.href = "login.html";
+document.addEventListener("DOMContentLoaded", () => {
+  const lista = document.getElementById("lista-agendamentos");
 
-const lista = document.getElementById("lista");
-
-async function carregar() {
-  lista.innerHTML = "";
-  const agendamentos = await listarAgendamentos();
-
-  if (agendamentos.length === 0) {
-    lista.innerHTML = "<p>Nenhum agendamento.</p>";
+  if (!lista) {
+    console.error("Elemento #lista-agendamentos não encontrado");
     return;
   }
 
-  agendamentos.forEach(a => {
-    const div = document.createElement("div");
-    div.className = "agendamento";
-    div.innerHTML = `
-      <strong>${a.servico}</strong><br>
-      R$ ${a.valor}<br>
-      ${a.data} - ${a.hora}<br>
-      <button onclick="cancelar('${a.id}')">Cancelar</button>
+  const agendamentos = getAgendamentos();
+
+  lista.innerHTML = "";
+
+  if (agendamentos.length === 0) {
+    lista.innerHTML = "<li>Nenhum agendamento encontrado</li>";
+    return;
+  }
+
+  agendamentos.forEach((a, index) => {
+    const li = document.createElement("li");
+
+    // 🔹 CLASSE NECESSÁRIA PARA O CSS
+    li.classList.add("agendamento");
+
+    li.innerHTML = `
+      <div class="agendamento-info">
+        <strong>${a.servico}</strong>
+        <span>Data: ${a.data}</span>
+        <span>Hora: ${a.hora}</span>
+      </div>
+      <button onclick="cancelar(${index})">Cancelar</button>
     `;
-    lista.appendChild(div);
+
+    lista.appendChild(li);
   });
-}
+});
 
-async function cancelar(id) {
-  if (!confirm("Deseja cancelar este agendamento?")) return;
-  await cancelarAgendamento(id);
-  carregar();
+function cancelar(index) {
+  if (confirm("Deseja cancelar este agendamento?")) {
+    removerAgendamento(index);
+    location.reload();
+  }
 }
-
-carregar();

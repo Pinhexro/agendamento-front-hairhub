@@ -34,23 +34,6 @@ function salvarDB(dados) {
 }
 
 // ==============================
-// MIDDLEWARE AUTH
-// ==============================
-function auth(req, res, next) {
-    const token = req.headers.authorization;
-
-    if (!token) return res.status(401).json({ error: "Não autorizado" });
-
-    try {
-        const decoded = jwt.verify(token, SECRET);
-        req.user = decoded.phone;
-        next();
-    } catch {
-        res.status(401).json({ error: "Token inválido" });
-    }
-}
-
-// ==============================
 // LOGIN (SIMULADO)
 // ==============================
 app.post("/login", (req, res) => {
