@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // ==============================
-// MONGODB
+// MONGO DB
 // ==============================
 mongoose
     .connect(process.env.MONGO_URL)
