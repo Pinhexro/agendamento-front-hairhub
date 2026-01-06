@@ -4,7 +4,7 @@
 const token = localStorage.getItem("token");
 if (!token) window.location.href = "login.html";
 
-const API_URL = "http://localhost:3000/agendamentos";
+const API_URL = "https://agendamento-hairhub.onrender.com";
 
 async function listarAgendamentos() {
     const res = await fetch(API_URL);

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Profissional</title>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Painel do Profissional</h2>
+
+        <div class="dashboard">
+            <div class="card">
+                <span>Hoje</span>
+                <strong id="total-hoje">0</strong>
+            </div>
+
+            <div class="card">
+                <span>Semana</span>
+                <strong id="total-semana">0</strong>
+            </div>
+
+            <div class="card">
+                <span>Mês</span>
+                <strong id="total-mes">0</strong>
+            </div>
+        </div>
+
+        <!-- Filtro -->
+        <div class="filtros">
+            <input type="date" id="filtroData">
+            <select id="filtroPeriodo">
+                <option value="dia">Dia</option>
+                <option value="semana">Semana</option>
+                <option value="mes">Mês</option>
+            </select>
+            <button onclick="filtrar()">Filtrar</button>
+        </div>
+
+        <hr>
+
+        <!-- Novo agendamento manual -->
+        <h3>Novo Agendamento Manual</h3>
+
+        <input type="text" id="nome" placeholder="Nome do cliente">
+        <input type="tel" id="telefone" placeholder="Telefone">
+
+        <select id="servico">
+            <option value="">Selecione o serviço</option>
+            <option value="Corte de cabelo">Corte de cabelo</option>
+            <option value="Corte + Barba">Corte + Barba</option>
+        </select>
+
+        <input type="date" id="data">
+        <select id="hora"></select>
+
+        <button onclick="agendarManual()">Agendar</button>
+
+        <hr>
+
+        <!-- Lista -->
+        <h3>Agendamentos</h3>
+        <ul id="lista-agendamentos"></ul>
+
+        <br>
+        <a href="index.html">Voltar</a>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

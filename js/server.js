@@ -1,84 +1,71 @@
 require("dotenv").config();
-const axios = require("axios");
-
-// ==============================
-// PROTEGER TODOS AS PÁGINAS
-// ==============================
-const token = localStorage.getItem("token");
-if (!token) window.location.href = "login.html";
 
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const fs = require("fs");
-const jwt = require("jsonwebtoken");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-const DB_PATH = "./db.json";
-const SECRET = "hairhub_segredo";
+// ==============================
+// MONGODB
+// ==============================
+mongoose
+    .connect(process.env.MONGO_URL)
+    .then(() => console.log("✅ MongoDB conectado"))
+    .catch(err => console.error("❌ Erro MongoDB:", err));
 
 // ==============================
-// UTIL
+// ROTA RAIZ (OBRIGATÓRIA)
 // ==============================
-function lerDB() {
-    if (!fs.existsSync(DB_PATH)) {
-        fs.writeFileSync(DB_PATH, JSON.stringify([]));
-    }
-    return JSON.parse(fs.readFileSync(DB_PATH));
-}
-
-function salvarDB(dados) {
-    fs.writeFileSync(DB_PATH, JSON.stringify(dados, null, 2));
-}
-
-// ==============================
-// LOGIN (SIMULADO)
-// ==============================
-app.post("/login", (req, res) => {
-    const { phone } = req.body;
-    if (!phone) return res.status(400).json({ error: "Telefone obrigatório" });
-
-    const token = jwt.sign({ phone }, SECRET, { expiresIn: "7d" });
-    res.json({ token });
+app.get("/", (req, res) => {
+    res.send("API HairHub online 🚀");
 });
 
 // ==============================
-// AGENDAMENTOS (PROTEGIDO)
+// MODELO
 // ==============================
-app.get("/agendamentos", auth, (req, res) => {
-    const dados = lerDB().filter(a => a.user === req.user);
+const AgendamentoSchema = new mongoose.Schema({
+    nome: String,
+    telefone: String,
+    servico: String,
+    data: String,
+    hora: String
+});
+
+const Agendamento = mongoose.model("Agendamento", AgendamentoSchema);
+
+// ==============================
+// ROTAS
+// ==============================
+app.get("/agendamentos", async (req, res) => {
+    const dados = await Agendamento.find();
     res.json(dados);
 });
 
-app.post("/agendamentos", auth, (req, res) => {
-    const { servico, valor, data, hora } = req.body;
-    const dados = lerDB();
+app.post("/agendamentos", async (req, res) => {
+    const { nome, telefone, servico, data, hora } = req.body;
 
-    const conflito = dados.find(
-        a => a.user === req.user && a.data === data && a.hora === hora
-    );
-    if (conflito) return res.status(409).json({ error: "Horário ocupado" });
+    const conflito = await Agendamento.findOne({ data, hora });
+    if (conflito) {
+        return res.status(409).json({ error: "Horário ocupado" });
+    }
 
-    dados.push({ user: req.user, servico, valor, data, hora });
-    salvarDB(dados);
-    res.status(201).json({ message: "Agendado" });
+    await Agendamento.create({ nome, telefone, servico, data, hora });
+    res.status(201).json({ message: "Agendamento criado" });
 });
 
-app.delete("/agendamentos", auth, (req, res) => {
-    const { data, hora } = req.body;
-    let dados = lerDB();
-
-    dados = dados.filter(
-        a => !(a.user === req.user && a.data === data && a.hora === hora)
-    );
-
-    salvarDB(dados);
-    res.json({ message: "Cancelado" });
+app.delete("/agendamentos/:id", async (req, res) => {
+    await Agendamento.findByIdAndDelete(req.params.id);
+    res.json({ message: "Agendamento removido" });
 });
 
 // ==============================
-app.listen(3000, () => {
-    console.log("✅ Backend com login rodando");
+// PORTA (RENDER)
+// ==============================
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log("🚀 Servidor rodando na porta", PORT);
 });

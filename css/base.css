@@ -4,75 +4,142 @@
 }
 
 body {
-    background: #f2f2f2;
     margin: 0;
-    padding: 0;
+    background: #f4f6f8;
+    color: #333;
 }
 
 .container {
-    max-width: 400px;
-    margin: 60px auto;
+    max-width: 900px;
+    margin: 30px auto;
     background: #fff;
-    padding: 30px;
+    padding: 20px;
     border-radius: 10px;
-    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-h1,
-h2 {
-    margin-bottom: 20px;
+h2,
+h3 {
+    margin-top: 0;
+    color: #222;
 }
 
-.btn {
-    display: block;
-    padding: 12px;
-    text-decoration: none;
-    background: #ddd;
-    color: #000;
-    border-radius: 6px;
-    font-weight: bold;
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
 }
 
-.btn.primary {
-    background: #007bff;
-    color: #fff;
-}
-
-.btn:hover {
-    opacity: 0.9;
-}
-
+/* Inputs */
 input,
 select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
+    margin: 6px 0 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
 }
 
-.btn {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    margin-top: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #000;
+}
+
+/* Botões */
+button {
+    background: #000;
+    color: #fff;
     border: none;
-    text-align: center;
+    padding: 10px 14px;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 14px;
 }
 
-.btn.primary {
-    background: #0d6efd;
-    color: white;
+button:hover {
+    opacity: 0.9;
 }
 
-.btn.primary:hover {
-    background: #0b5ed7;
+button.cancelar {
+    background: #c0392b;
 }
 
-.btn.cancel {
-    background: #e0e0e0;
-    color: #000;
-    text-decoration: none;
+/* Filtros */
+.filtros {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filtros input,
+.filtros select {
+    flex: 1;
+}
+
+/* Lista de agendamentos */
+#lista-agendamentos {
+    list-style: none;
+    padding: 0;
+}
+
+#lista-agendamentos li {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.agendamento-info {
+    line-height: 1.5;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    #lista-agendamentos li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .filtros {
+        flex-direction: column;
+    }
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.dashboard .card {
+    background: #000;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.dashboard .card span {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.dashboard .card strong {
+    display: block;
+    font-size: 28px;
+    margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
 }
