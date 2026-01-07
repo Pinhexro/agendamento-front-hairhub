@@ -143,3 +143,27 @@ button.cancelar {
         grid-template-columns: 1fr;
     }
 }
+
+/* Mobile First */
+.container {
+    width: 100%;
+    padding: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+}
+
+/* Responsividade do site */
+@media (min-width: 768px) {
+    .container {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    button {
+        width: auto;
+    }
+}
