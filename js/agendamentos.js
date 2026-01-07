@@ -1,42 +1,73 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const lista = document.getElementById("lista-agendamentos");
+const express = require("express");
+const router = express.Router();
+const Agendamento = require("../../agendamento-backend/models/Agendamento");
 
-  if (!lista) {
-    console.error("Elemento #lista-agendamentos não encontrado");
-    return;
+/**
+ * GET - Listar todos os agendamentos
+ */
+router.get("/", async (req, res) => {
+  try {
+    const agendamentos = await Agendamento.find().sort({ data: 1, hora: 1 });
+    res.json(agendamentos);
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao buscar agendamentos" });
   }
-
-  const agendamentos = getAgendamentos();
-
-  lista.innerHTML = "";
-
-  if (agendamentos.length === 0) {
-    lista.innerHTML = "<li>Nenhum agendamento encontrado</li>";
-    return;
-  }
-
-  agendamentos.forEach((a, index) => {
-    const li = document.createElement("li");
-
-    // 🔹 CLASSE NECESSÁRIA PARA O CSS
-    li.classList.add("agendamento");
-
-    li.innerHTML = `
-      <div class="agendamento-info">
-        <strong>${a.servico}</strong>
-        <span>Data: ${a.data}</span>
-        <span>Hora: ${a.hora}</span>
-      </div>
-      <button onclick="cancelar(${index})">Cancelar</button>
-    `;
-
-    lista.appendChild(li);
-  });
 });
 
-function cancelar(index) {
-  if (confirm("Deseja cancelar este agendamento?")) {
-    removerAgendamento(index);
-    location.reload();
+/**
+ * POST - Criar agendamento
+ */
+router.post("/", async (req, res) => {
+  try {
+    const { cliente, telefone, servico, valor, data, hora } = req.body;
+
+    if (!cliente || !telefone || !servico || !valor || !data || !hora) {
+      return res.status(400).json({ error: "Dados incompletos" });
+    }
+
+    const novoAgendamento = new Agendamento({
+      cliente,
+      telefone,
+      servico,
+      valor,
+      data,
+      hora
+    });
+
+    await novoAgendamento.save();
+
+    res.status(201).json({
+      message: "Agendamento criado com sucesso",
+      agendamento: novoAgendamento
+    });
+
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({ error: "Horário já ocupado" });
+    }
+
+    res.status(500).json({ error: "Erro ao criar agendamento" });
   }
-}
+});
+
+/**
+ * DELETE - Cancelar agendamento
+ */
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const removido = await Agendamento.findByIdAndDelete(id);
+
+    if (!removido) {
+      return res.status(404).json({ error: "Agendamento não encontrado" });
+    }
+
+    res.json({ message: "Agendamento cancelado" });
+
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao cancelar agendamento" });
+  }
+});
+
+module.exports = router;
