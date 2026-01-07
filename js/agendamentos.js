@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Agendamento = require("../../agendamento-backend/models/Agendamento");
+const Agendamento = require("../models/Agendamento");
 
 /**
  * GET - Listar todos os agendamentos
