@@ -44,18 +44,33 @@ function confirmar() {
         return;
     }
 
-    const agendamentos = getAgendamentos();
-    const existe = agendamentos.some(a => a.data === data && a.hora === hora);
+    // ✅ SALVA O TELEFONE PARA "MEUS AGENDAMENTOS"
+    localStorage.setItem("telefone", telefone);
 
-    if (existe) {
-        alert("Horário indisponível");
-        return;
-    }
-
-    salvarAgendamento({ servico, data, hora });
-
-    alert("Agendamento confirmado!");
-    window.location.href = "agendamentos.html";
+    fetch("https://agendamento-hairhub-urkz.onrender.com/agendamentos", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nome,
+            telefone,
+            servico,
+            data,
+            hora
+        })
+    })
+        .then(res => {
+            if (!res.ok) throw new Error("Erro ao agendar");
+            return res.json();
+        })
+        .then(() => {
+            alert("Agendamento confirmado!");
+            window.location.href = "agendamentos.html";
+        })
+        .catch(() => {
+            alert("Horário indisponível ou erro no servidor");
+        });
 }
 
 gerarHorarios();
