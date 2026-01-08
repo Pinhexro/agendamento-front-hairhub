@@ -33,11 +33,13 @@ function bloquearHorarios() {
 dataInput.addEventListener("change", bloquearHorarios);
 
 function confirmar() {
+    const nome = document.getElementById("nome").value;
+    const telefone = document.getElementById("telefone").value;
     const servico = document.getElementById("servico").value;
-    const data = dataInput.value;
-    const hora = horaSelect.value;
+    const data = document.getElementById("data").value;
+    const hora = document.getElementById("hora").value;
 
-    if (!servico || !data || !hora) {
+    if (!telefone || !servico || !data || !hora) {
         alert("Preencha todos os campos");
         return;
     }
