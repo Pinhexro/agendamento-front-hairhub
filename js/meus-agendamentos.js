@@ -29,3 +29,4 @@ fetch(`https://agendamento-hairhub-urkz.onrender.com/agendamentos/telefone/${tel
     .catch(() => {
         alert("Erro ao buscar agendamentos");
     });
+ 
