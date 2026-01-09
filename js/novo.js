@@ -28,7 +28,7 @@ function bloquearHorarios() {
             const opt = [...horaSelect.options].find(o => o.value === a.hora);
             if (opt) opt.disabled = true;
         });
-}
+}  
 
 dataInput.addEventListener("change", bloquearHorarios);
 
